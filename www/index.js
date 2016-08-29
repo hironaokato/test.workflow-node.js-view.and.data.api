@@ -15,7 +15,7 @@
 // DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////////////////
-var defaultUrn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDE2LTA4LTI5LTE2LTAzLTUwLXp1Y2phMXlxZXJhaW15b2x6enB0cjU5anZ1NWcvUm9ib3RBcm0uZHdmeA';
+var defaultUrn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bW9kZWwyMDE2LTA4LTI5LTE2LTI0LTUxLXl4YWZvdHAxZ2hvMjJ3Nmt3dGR5OHY3eHB5MmQvRHJpbGwuZHdmeA';
 
 $(document).ready(function () {
     var tokenurl = 'http://' + window.location.host + '/api/token';
@@ -42,12 +42,26 @@ $(document).ready(function () {
             var viewer = viewerFactory.createViewer(
                 $('#viewerDiv')[0],
                 viewerConfig);
+        
+        //added below-- function happens using GEOMETRY_LOADED_EVENT right after viewer load geometry
+         viewer.addEventListener(
+        Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+        function(event) {
+          loadExtensions(viewer);
+      });
+        //added end
 
             viewer.load(pathInfoCollection.path3d[0].path);
         },
         onError);
 
 });
+
+//added below-- then load Extensions
+  function loadExtensions(viewer) {
+    viewer.loadExtension('Viewing.Extension.Workshop');
+  }
+
 
 function onError(error) {
     console.log('Error: ' + error);
